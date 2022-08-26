@@ -1,79 +1,76 @@
-.wrapper {
-    margin: 15px auto;
-    max-width: 700px;
-  }
-  .container-calendar {
-    background: #ffffff;
-    padding: 15px;
-    width: 80%;
+@charset "utf-8";
+
+/*全体*/
+.wrapper{
+    max-width: 600px;
     margin: 0 auto;
-    overflow: auto;
-  }
-  .button-container-calendar button {
-    cursor: pointer;
-    display: inline-block;
-    zoom: 1;
-    background: #00a2b7;
-    color: #fff;
-    border: 1px solid #0aa2b5;
-    border-radius: 4px;
-    padding: 5px 10px;
-  }
-  .table-calendar {
+    color: #666;
+}
+#header {
+    text-align: center;
+    font-size: 24px;
+    width: 100%;
+    margin: 1rem 0 0;
+}
+
+/*カレンダー*/
+#calendar {
+    text-align: center;
+    width: 100%;
+}
+table {
+    outline: 2px solid #ddd;
     border-collapse: collapse;
     width: 100%;
-  }
-  .table-calendar th,
-  .table-calendar td{
-    padding: 10px;
-    border: 1px solid #e2e2e2;
+}
+th {
+    color: #000;
+}
+th, td {
+    outline: 1px solid #ddd;
+    padding-top: 10px;
+    padding-bottom: 10px;
     text-align: center;
-    vertical-align: top;
-  }
-  .date-picker.selected {
-    font-weight: bold;
+}
+/*日曜日*/
+td:first-child {
+    color: red;
+}
+/*土曜日*/
+td:last-child {
+    color: blue;
+}
+/*前後月の日付*/
+td.disabled {
+    color: #ccc;
+}
+/*本日*/
+td.today {
+    background-color: #D65E72;
     color: #fff;
-    background: #cc0000;
-  }
-  .date-picker.selected span {
-    border-bottom: 2px solid currentColor;
-  }
-  /* 日曜 */
-  .date-picker:nth-child(1) {
-  color: red;
-  }
-  /* 土曜 */
-  .date-picker:nth-child(7) {
-  color: blue;
-  }
-  #monthAndYear {
-    text-align: center;
-    margin-top: 0;
-  }
-  .button-container-calendar {
+}
+
+/*ボタン*/
+#next-prev-button {
     position: relative;
-    margin-bottom: 1em;
-    overflow: hidden;
-    clear: both;
-  }
-  #previous {
-    float: left;
-  }
-  #next {
-    float: right;
-  }
-  .footer-container-calendar {
-    margin-top: 1em;
-    border-top: 1px solid #dadada;
-    padding: 10px 0;
-  }
-  .footer-container-calendar select {
+}
+#next-prev-button button{
     cursor: pointer;
-    display: inline-block;
-    zoom: 1;
-    background: #ffffff;
-    color: #454545;
-    border: 1px solid #bfc5c5;
-    border-radius: 3px;
-    padding: 5px 1em;
-  }
+    background: #B78D4A;
+    color: #fff;
+    border: 1px solid #B78D4A;
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 0.5rem 2rem;
+    margin: 1rem 0;
+}
+#next-prev-button button:hover{
+    background-color: #D4BB92;
+    border-color: #D4BB92;
+}
+#prev {
+    float: left;
+}
+#next {
+    float: right;
+}
