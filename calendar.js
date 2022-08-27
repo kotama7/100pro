@@ -11,9 +11,6 @@ Date(年,月,日,時,分,秒,ミリ秒)のかたちでミリ秒を指定でき�
 // 初期表示
 window.onload = function () {
   showProcess(today, calendar);
-  /*ShowProcessは処理モーダル（モーダルは操作するまで親ウィンドウを操作できなくする小ウィンドウ）を表示する関数
-  
-  */
 };
 
 //window.onloadはHTMLが読み込まれてすぐに実行される関数
