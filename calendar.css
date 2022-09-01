@@ -32,8 +32,10 @@ th, td {
     padding-bottom: 10px;
     text-align: center;
 }
-/*日曜日*/
-td:first-child {
+
+/*祝日と日曜日*/
+td:first-child,
+td.holiday{
     color: red;
 }
 /*土曜日*/
