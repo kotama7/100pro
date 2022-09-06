@@ -2,16 +2,21 @@ from django.db import models
 from datetime import date
 
 # Create your models here.
-class schedule(models.Model):
-    date = models.DateField()
-    description = models.CharField(max_length=100)
-    details = models.CharField(max_length=1000)
-    mode = models.CharField(max_length=100)
+class Schedule(models.Model):
+    start_date = models.DateField()
+    description = models.CharField(max_length=100,blank=True)
+    end_date = models.DateField()
 
     def __str__(self):
         return self.description
 
 class Individual_data(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,primary_key=True,unique=True)
     password = models.CharField(max_length=100)
-    data = models.ForeignKey(schedule,on_delete=models.CASCADE)
+    schedule = models.ForeignKey(Schedule,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.schedule
+
+    def __str__(self) -> str:
+        return self.data
