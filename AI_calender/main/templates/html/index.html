@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+<form action="/" method="post">
 <body>
+    {% csrf_token %}
     <div>
         <label for="user_name">ユーザーネーム</label>
         <input type="text" name="user_naem" id="user_name">
@@ -17,5 +19,7 @@
         <input type="text" name="password" id='user_name'>
     </div>
     <input type="submit" name="login" id="login">
+    <div>{{error}}</div>
 </body>
+</form>
 </html>

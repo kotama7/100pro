@@ -1,31 +1,74 @@
-from re import error, template
-from typing import Generic
-from django.http.response import Http404, StreamingHttpResponse
+from django.http.response import Http404
 from django.shortcuts import get_object_or_404, redirect, render
-from django.http import HttpResponse
 from django.views import generic
+
+from .forms import admission_form, verify_form, edit_form
 # Create your views here.
-from .models import Schedule, Individual_data
-from .forms import verify_form
+from .models import Individual_data, Schedule
+
+global_name = ''
 
 def index(request):
+    global global_name
     if request.method == 'POST':
         form = verify_form(request.POST)
         if not form.is_valid():
-            return redirect('html/index.html',error='必要事項が入力されていません')
+            return redirect('',error='必要事項が入力されていません')
         try:
             user = Individual_data.objects.get(user_name=form.name)
         except Individual_data.DoesNotExist:
-            return redirect('html/index.html',error='そのようなユーザーは存在しません')
+            return redirect('',error='そのようなユーザーは存在しません')
         if user.password == form.password:
-            return 
+            global_name = form.name 
         else:
-            return redirect(request,'html/index.html',error='ユーザー名とパスワードが一致しません')
+            return redirect('',error='ユーザー名とパスワードが一致しません')
     else:
         return render(request,'html/index.html')
 
+def create(request):
+    global global_name
+    if request.method == 'POST':
+        form = admission_form(request.POST)
+        if not form.is_valid():
+            return redirect('create/',error='必要事項が入力されていません')
+        try:
+            Individual_data.objects.get(user_name=form.name)
+            return redirect('create/',error='その名前は現在使われています')
+        except Individual_data.DoesNotExist:
+            pass
+        if form.password == form.verify_password:
+            new = Individual_data(name=form.name,password=form.password)
+            new.save()
+            global_name = form.name
+            return redirect('main/')
+        else:
+            return redirect('create/',error='パスワードが一致しません')
+    else:
+        return render(request,'html/create.html')
 
-def main(request,name):
-    all_shedule = Individual_data.objects.filter(user_name__name=name)
-    return render(request, './frontend/html/main.html',all_shedule)
+def main(request):
+    try:
+        user = Individual_data.objects.get(user_name=global_name)
+    except Individual_data.DoesNotExist:
+        return Http404()
+    all_schedule = Schedule.objects.filter(user_data=user)
+    context = {'object':[obj for obj in all_schedule]}
+    return render(request,'html/main.html',context)
 
+def edit(request,pk):
+    task = Schedule.objects.get(id=pk)
+    try:
+        user = Individual_data.objects.get(user_name=global_name)
+    except Individual_data.DoesNotExist:
+        return Http404()
+    if request.method == 'POST':
+        form = edit_form(request.POST)
+        if not form.is_valid():
+            return redirect(f'{pk}/',error='必要事項が入力されていません')
+        task.update(start_date=form.start_date,description=form.description,end_date=form.end_date)
+        redirect('main/')
+    else:
+        return render(request,'html/edit.html',{'schedule':task})
+
+def AI(request,date):
+    return

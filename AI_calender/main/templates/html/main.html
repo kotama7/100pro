@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang = 'ja'>
+<body>
+    {% for member in obj %}
+        <ol>{{ member.schedule.start_date }}</ol>
+        <ol>{{ member.schedule.description }}</ol>
+        <ol>{{ member.schedule.ecd_date }}</ol>
+    {% endfor %}
+</body>
