@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<form action="/" method="post">
+<body>
+    {% csrf_token %}
+    <div>
+        <label for="user_name">ユーザーネーム</label>
+        <input type="text" name="user_naem" id="user_name">
+    </div>
+    <p></p>
+    <div>
+        <label for="password">パスワード</label>
+        <input type="text" name="password" id='user_name'>
+    </div>
+    <input type="submit" name="register" id="register">
+    <div>{{error}}</div>
+</body>
+</form>
+</html>

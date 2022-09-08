@@ -2,9 +2,10 @@ from django.http.response import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
 
-from .forms import admission_form, verify_form, edit_form
+from .forms import admission_form, verify_form, edit_form, interval_form
 # Create your views here.
 from .models import Individual_data, Schedule
+from dbscan import clasify
 
 global_name = ''
 
@@ -70,5 +71,15 @@ def edit(request,pk):
     else:
         return render(request,'html/edit.html',{'schedule':task})
 
-def AI(request,date):
-    return
+def AI(request):
+    try:
+        user = Individual_data.objects.get(user_name=global_name)
+    except Individual_data.DoesNotExist:
+        return Http404()
+    if request.method == 'POST':
+        form = interval_form(request.POST)
+    if not form.is_valid():
+        return redirect('AI_choicwe/')
+    
+    else:
+        render(request,'html/AI.html')
