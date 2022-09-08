@@ -6,20 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-<form action="/" method="post">
 <body>
+    <form action='' method="post">
     {% csrf_token %}
     <div>
-        <label for="user_name">ユーザーネーム</label>
-        <input type="text" name="user_naem" id="user_name">
+        <label for="name">ユーザーネーム</label>
+        <input type="text" name="name" id="name">
     </div>
     <p></p>
     <div>
         <label for="password">パスワード</label>
-        <input type="text" name="password" id='user_name'>
+        <input type="text" name="password" id='password'>
     </div>
-    <input type="submit" name="login" id="login">
-    <div>{{error}}</div>
+    <button>login</button>
+    </form>
+    <p>{{error}}</p>
+    <div>
+        <a href='account_create/'>アカウントを新たに作る</a>
+    </div>
 </body>
-</form>
 </html>

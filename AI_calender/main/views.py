@@ -5,7 +5,7 @@ from django.views import generic
 from .forms import admission_form, verify_form, edit_form, interval_form
 # Create your views here.
 from .models import Individual_data, Schedule
-from dbscan import clasify
+from .dbscan import clasify
 
 global_name = ''
 
@@ -14,15 +14,15 @@ def index(request):
     if request.method == 'POST':
         form = verify_form(request.POST)
         if not form.is_valid():
-            return redirect('',error='必要事項が入力されていません')
+            return render(request,'html/index.html',{'error':'必要事項が入力されていません'})
         try:
-            user = Individual_data.objects.get(user_name=form.name)
+            user = Individual_data.objects.get(name=form.cleaned_data['name'])
         except Individual_data.DoesNotExist:
-            return redirect('',error='そのようなユーザーは存在しません')
-        if user.password == form.password:
-            global_name = form.name 
+            return render(request,'html/index.html',{'error':'そのようなユーザーは存在しません'})
+        if user.password == form.cleaned_data['password']:
+            global_name = form.cleaned_data['name'] 
         else:
-            return redirect('',error='ユーザー名とパスワードが一致しません')
+            return render(request,'html/index.html',{'error':'ユーザー名とパスワードが一致しません'})
     else:
         return render(request,'html/index.html')
 
@@ -30,26 +30,28 @@ def create(request):
     global global_name
     if request.method == 'POST':
         form = admission_form(request.POST)
+        print(form)
         if not form.is_valid():
-            return redirect('create/',error='必要事項が入力されていません')
+            return render(request,'html/create.html',{'error':'必要事項が入力されていません'})
         try:
-            Individual_data.objects.get(user_name=form.name)
-            return redirect('create/',error='その名前は現在使われています')
+            Individual_data.objects.get(name=form.cleaned_data['name'])
+            return render(request,'html/create.html',{'error':'その名前は現在使われています'})
         except Individual_data.DoesNotExist:
             pass
-        if form.password == form.verify_password:
-            new = Individual_data(name=form.name,password=form.password)
+        if form.cleaned_data['password'] == form.cleaned_data['verify_password']:
+            new = Individual_data(name=form.cleaned_data['name'],password=form.cleaned_data['password'])
+            print(new.name,new.password)
             new.save()
-            global_name = form.name
+            global_name = form.cleaned_data['name']
             return redirect('main/')
         else:
-            return redirect('create/',error='パスワードが一致しません')
+            return render(request,'html/create.html',{'error':'パスワードが一致しません'})
     else:
         return render(request,'html/create.html')
 
 def main(request):
     try:
-        user = Individual_data.objects.get(user_name=global_name)
+        user = Individual_data.objects.get(name=global_name)
     except Individual_data.DoesNotExist:
         return Http404()
     all_schedule = Schedule.objects.filter(user_data=user)
@@ -65,7 +67,7 @@ def edit(request,pk):
     if request.method == 'POST':
         form = edit_form(request.POST)
         if not form.is_valid():
-            return redirect(f'{pk}/',error='必要事項が入力されていません')
+            return redirect(request,'html/edit.html',{'error':'必要事項が入力されていません','schedule':task})
         task.update(start_date=form.start_date,description=form.description,end_date=form.end_date)
         redirect('main/')
     else:
@@ -79,7 +81,6 @@ def AI(request):
     if request.method == 'POST':
         form = interval_form(request.POST)
     if not form.is_valid():
-        return redirect('AI_choicwe/')
-    
+        return redirect('AI_choice/')
     else:
         render(request,'html/AI.html')
