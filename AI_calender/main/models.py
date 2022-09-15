@@ -13,6 +13,7 @@ class Schedule(models.Model):
     start_date = models.DateField()
     description = models.CharField(max_length=100,blank=True)
     end_date = models.DateField()
+    schedule_class = models.CharField(max_length=1) #action=1,work=2,labor=3
     user_data = models.ForeignKey(Individual_data,on_delete=models.CASCADE)
 
     def __str__(self):

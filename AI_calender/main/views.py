@@ -1,11 +1,12 @@
 from django.http.response import Http404
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render
 from django.views import generic
-
+import forest
 from .forms import admission_form, verify_form, edit_form, interval_form
 # Create your views here.
 from .models import Individual_data, Schedule
-from .dbscan import clasify
+import pickle
+import k_means
 
 global_name = ''
 
@@ -59,7 +60,6 @@ def main(request):
     return render(request,'html/main.html',context)
 
 def edit(request,pk):
-    task = Schedule.objects.get(id=pk)
     try:
         user = Individual_data.objects.get(user_name=global_name)
     except Individual_data.DoesNotExist:
@@ -68,7 +68,14 @@ def edit(request,pk):
         form = edit_form(request.POST)
         if not form.is_valid():
             return redirect(request,'html/edit.html',{'error':'必要事項が入力されていません','schedule':task})
-        task.update(start_date=form.start_date,description=form.description,end_date=form.end_date)
+        try:
+            task = Schedule.objects.get(id=pk)
+            cls = forest.classifyer(form.cleaned_data['description'])
+            task.update(start_date=form.cleaned_data['start_date'],description=form.cleaned_data['description'],end_date=form.cleaned_data['end_date'],schedule_class=cls)    
+        except Schedule.DoesNotExist:
+            cls = forest.classifyer(form.cleaned_data['description'])
+            task = Schedule(start_date=form.cleaned_data['start_date'],description=form.cleaned_data['description'],end_date=form.cleaned_data['end_date'],schedule_class=cls,user_data=user)
+            task.save()
         redirect('main/')
     else:
         return render(request,'html/edit.html',{'schedule':task})
@@ -80,7 +87,9 @@ def AI(request):
         return Http404()
     if request.method == 'POST':
         form = interval_form(request.POST)
-    if not form.is_valid():
-        return redirect('AI_choice/')
+        if not form.is_valid():
+            return redirect('AI_choice/')
+        plan = k_means.classifyer(bytes(form.cleaned_data['start'],encoding='utf-8'),bytes(form.cleaned_data['end'],encoding='utf-8'),byte())   #start,end
+        return redirect('main/')
     else:
         render(request,'html/AI.html')
