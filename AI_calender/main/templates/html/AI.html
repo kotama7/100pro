@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI_choice</title>
+<body>
+    <form action="" method="post">
+    {% csrf_token %}
+    <div>
+        <label for="start">開始時刻</label>
+        <input type="datetime" name="start" id="start">
+    </div>
+    <p></p>
+    <div>
+        <label for="end">終了時刻</label>
+        <input type="datetime" name="end" id='end'>
+    </div>
+    <button>決定</button>
+    </form>
+    <div>
+        <a href='main/'>メインページに戻る</a>
+    </div>
+</body>
+</html>

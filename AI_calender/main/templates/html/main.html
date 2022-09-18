@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html lang = 'ja'>
 <body>
-    {% for member in obj %}
-        <ol>{{ member.schedule.start_date }}</ol>
-        <ol>{{ member.schedule.description }}</ol>
-        <ol>{{ member.schedule.ecd_date }}</ol>
-    {% endfor %}
+    <div>
+        {% for member in obj %}
+            <ol>{{ member.schedule.start_date }}</ol>
+            <ol>{{ member.schedule.description }}</ol>
+            <ol>{{ member.schedule.end_date }}</ol>
+            <ol></ol>
+        {% endfor %}
+    </div>
+    <div>
+        <a href='AI_choice/'>AIに予定を作ってもらう</a>
+    </div>
 </body>
