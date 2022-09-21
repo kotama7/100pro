@@ -6,6 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>予定編集</title>
 </head>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
 <body>
-    
+    <form action="" method="post">
+    {% csrf_token %}
+    <div>
+        <label for="start_date">開始時刻</label>
+        <input type="text" name="start_date" id="start_date">
+    </div>
+    <p></p>
+    <div>
+        <label for="end_date">終了時刻</label>
+        <input type="text" name="end_date" id='end_date'>
+    </div>
+    <div>
+        <label for="description">内容</label>
+        <input type="text" name="description" id="description">
+    </div>
+    <input type="submit" name="register" id="register">
+    </form>
+    {{error}}
+    <div>
+        <a href='/main/'>メインページに戻る</a>
+    </div>
 </body>
+</html>

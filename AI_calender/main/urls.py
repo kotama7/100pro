@@ -8,4 +8,5 @@ urlpatterns = [
     path('main/',views.main,name='main'),
     path('<int:pk>/',views.edit,name='edit'),
     path('AI_choice/',views.AI,name='AI'),
+    path('auth/',views.auth,name='auth'),
 ]

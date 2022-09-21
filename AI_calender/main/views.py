@@ -4,10 +4,9 @@ from . import forest, decide
 from .forms import admission_form, verify_form, edit_form, interval_form
 # Create your views here.
 from .models import Individual_data, Schedule
-import datetime
 
 global_name = ''
-detail_dict = {'2':'社会的行動','3':'文化的行動'}
+detail_dict = {'1':'生理的行動','2':'社会的行動','3':'文化的行動'}
 
 def index(request):
     global global_name
@@ -60,15 +59,16 @@ def main(request):
 
 def edit(request,pk):
     try:
-        user = Individual_data.objects.get(user_name=global_name)
+        user = Individual_data.objects.get(name=global_name)
     except Individual_data.DoesNotExist:
         raise Http404()
     if request.method == 'POST':
         form = edit_form(request.POST)
         if not form.is_valid():
-            return redirect(request,'html/edit.html',{'error':'必要事項が入力されていません','schedule':task})
-        start = datetime.datetime.strptime(form.cleaned_data['start_date'],r"%d/%m/%Y %H:%M:%S")
-        end = datetime.datetime.strptime(form.cleaned_data['end_date'],r"%d/%m/%Y %H:%M:%S")
+            print(form)
+            return render(request,'html/edit.html',{'error':'必要事項が入力されていません'})
+        start = form.cleaned_data['start_date']
+        end = form.cleaned_data['end_date']
         try:
             task = Schedule.objects.get(id=pk)
             cls = forest.classifyer(form.cleaned_data['description'])
@@ -77,22 +77,26 @@ def edit(request,pk):
             cls = forest.classifyer(form.cleaned_data['description'])
             task = Schedule(start_date=start,description=form.cleaned_data['description'],end_date=end,schedule_class=cls,user_data=user)
             task.save()
-        redirect('/main/')
+        return redirect('/main/')
     else:
-        return render(request,'html/edit.html',{'schedule':task})
+        return render(request,'html/edit.html')
 
 def AI(request):
     try:
-        user = Individual_data.objects.get(user_name=global_name)
+        user = Individual_data.objects.get(name=global_name)
     except Individual_data.DoesNotExist:
         raise Http404()
     if request.method == 'POST':
         form = interval_form(request.POST)
         if not form.is_valid():
             return redirect('/AI_choice/')
-        plan = decide.clasifyer(form.cleaned_data['start'],form.cleaned_data['end'])   #start,end
+        plan = decide.clasifyer(form.cleaned_data['start_date'],form.cleaned_data['end_date'])   #start,end
         for ele in plan:
-            Schedule(start_date=ele[0],end_date=ele[1],schedule_class=detail_dict[ele[2]],user_data=user).save()
+            Schedule(start_date=ele[0],end_date=ele[1],schedule_class=ele[2][1],description=detail_dict[ele[2][1]],user_data=user).save()
         return redirect('/main/')
     else:
-        render(request,'html/AI.html')
+        return render(request,'html/AI.html')
+
+def auth(request):
+    decide.make()
+    return redirect('/')

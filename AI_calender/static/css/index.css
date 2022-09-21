@@ -1,0 +1,28 @@
+label{
+    display: inline;
+    width: 160px;
+    height: 30px;
+    margin: 10px ;
+    padding: 7px ;
+    align-items: center;
+    background-color: whitesmoke;
+    font-size: 20px;
+}
+input{
+    align-items: right;
+}
+dl div dt{
+    width: 210px;
+    padding: 10px 0;
+    float:left;
+    clear: both;
+}
+dl div dd{
+    padding: 10px 0;
+}
+    .txt{
+        display: inline-block;
+        width: 200px;
+        padding: 10px;
+        height: 30px;
+    }

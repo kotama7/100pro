@@ -1,4 +1,3 @@
-from pickle import NONE
 from django.db import models
 
 # Create your models here.
@@ -10,9 +9,9 @@ class Individual_data(models.Model):
         return self.name
 
 class Schedule(models.Model):
-    start_date = models.DateField()
+    start_date = models.DateTimeField()
     description = models.CharField(max_length=100,blank=True)
-    end_date = models.DateField()
+    end_date = models.DateTimeField()
     schedule_class = models.CharField(max_length=1) #labor=1,action=2,work=3
     user_data = models.ForeignKey(Individual_data,on_delete=models.CASCADE)
 

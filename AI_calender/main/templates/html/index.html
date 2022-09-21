@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ホームページ</title>
 </head>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
 <body>
     <form action='' method="post">
     {% csrf_token %}
