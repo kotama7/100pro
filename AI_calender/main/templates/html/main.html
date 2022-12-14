@@ -1,0 +1,27 @@
+<html lang="ja">
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/main.css' %}">
+<script src="{% static 'js/main.js' %}"></script>
+
+
+<div class="wrapper">
+    <!-- xxxx年xx月を表示 -->
+    <h1 id="header"></h1>
+
+    <!-- ボタンクリックで月移動 -->
+    <div id="next-prev-button">
+        <input type="button" value="<" onclick="prev()" style="float: left;">
+        <input type="button" value=">" onclick="next()" style="float: right;">
+    </div>
+    <!-- カレンダー -->
+    <div id="calendar"></div>
+</div>
+<div>
+    <a href="/0/">新たに予定を入力する</a>
+    <a href='/AI_choice/'><b>AIに予定を作ってもらう</b></a>
+</div>
+全ての予定
+<p>{% for obj in object %}
+    <ol><a href="/{{obj.pk}}/"></a>{{obj.start_date}}~{{obj.end_date}}:{{obj.description}}</a></ol>
+    {% endfor %}</p>
+</html>
